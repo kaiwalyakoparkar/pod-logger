@@ -11,7 +11,8 @@ func Router() *gin.Engine {
 	fmt.Println("🎉 Server started")
 	router.GET("/api/logs", controller.GetLogs)
 	router.GET("/api/env", controller.GetEnv)
-	router.GET("/", controller.GetHealth)
+	router.GET("/api/status", controller.GetStatus)
+	router.GET("/", controller.Hello)
 
 	//Inline function for the same thing above
 	// router.GET("/api/logs", func(c *gin.Context) {
