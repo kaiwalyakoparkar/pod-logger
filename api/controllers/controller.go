@@ -22,6 +22,18 @@ func getLogs() string {
 	return output
 }
 
+func getEnvs() string {
+	cmd := exec.Command("env")
+	out, err := cmd.Output()
+	if err != nil {
+		fmt.Println("could not run command: ", err)
+	} else {
+		fmt.Println("Output: \n", string(out))
+	}
+	output := string(out)
+	return output
+}
+
 func GetLogs(g *gin.Context) {
 	output := getLogs()
 	g.IndentedJSON(http.StatusOK, gin.H{
@@ -33,5 +45,12 @@ func GetHealth(g *gin.Context) {
 	g.IndentedJSON(http.StatusOK, gin.H{
 		"status": "OK",
 		"message": "Hello",
+	})
+}
+
+func GetEnv(g *gin.Context) {
+	output := getEnvs()
+	g.IndentedJSON(http.StatusOK, gin.H{
+		"env": output,
 	})
 }
