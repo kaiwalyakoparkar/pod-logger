@@ -17,7 +17,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           tags: |
-            type=ref,enable=true,priority=600,prefix=,suffix=,event=tag
+            type=sha, prefix=v1
           images: kaiwalyakoparkar/podlogger-api
       
       - name: Log in to Docker Hub
