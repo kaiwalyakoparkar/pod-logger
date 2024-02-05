@@ -14,4 +14,4 @@ TOKEN=$(cat ${SERVICEACCOUNT}/token)
 CACERT=${SERVICEACCOUNT}/ca.crt
 
 # Explore the API with TOKEN
-curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" ${APISERVER}/api/v1/namespaces/default/pods/ | jq -rM '.items[].metadata.name'
+curl --cacert ${CACERT} --header "Authorization: Bearer ${TOKEN}" ${APISERVER}/api/v1/namespaces/default/pods/
