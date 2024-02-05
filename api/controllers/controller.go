@@ -16,6 +16,8 @@ func getLogs() string {
 	//Place holder command
 	// cmd := exec.Command("curl", "http://kubernetes.default.svc/api")
 
+
+
 	cmd := exec.Command("curl", "--cacert", "${CACERT}", "--header", "Authorization: Bearer ${TOKEN}", "${APISERVER}/api")
 
 	out, err := cmd.Output()
@@ -30,13 +32,16 @@ func getLogs() string {
 
 func getStatus() string {
 	//This command gives the status of the kubernetes api
-	// cmd := exec.Command("curl", "http://kubernetes.default.svc/api")
 
-	cmd := exec.Command("curl", "--cacert", "${CACERT}", "--header", "Authorization: Bearer ${TOKEN}", "${APISERVER}/api")
+	// cmd := exec.Command("curl", "--cacert", "${CACERT}", "--header", "Authorization: Bearer ${TOKEN}", "${APISERVER}/api/v1/namespaces/default/pods/ ")
+
+	smt := exec.Command("chmod","+x","../scripts/auth.sh")
+	cmd := exec.Command("../scripts/auth.sh")
 
 	out,err := cmd.Output()
 	if err != nil {
 		fmt.Println("could not run command: ", err)
+		fmt.Println(smt)
 	} else {
 		fmt.Println("Output: \n", string(out))
 	}
