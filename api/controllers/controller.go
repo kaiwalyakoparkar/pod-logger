@@ -14,7 +14,9 @@ func getLogs() string {
 	// cmd := exec.Command("ls", "./")
 	// cmd:= exec.Command("tail", "-F", "/opt/logs.txt")
 	//Place holder command
-	cmd := exec.Command("curl", "http://kubernetes.default.svc/api")
+	// cmd := exec.Command("curl", "http://kubernetes.default.svc/api")
+
+	cmd := exec.Command("curl", "--cacert", "${CACERT}", "--header", "Authorization: Bearer ${TOKEN}", "${APISERVER}/api")
 
 	out, err := cmd.Output()
 	if err != nil {
@@ -28,7 +30,10 @@ func getLogs() string {
 
 func getStatus() string {
 	//This command gives the status of the kubernetes api
-	cmd := exec.Command("curl", "http://kubernetes.default.svc/api")
+	// cmd := exec.Command("curl", "http://kubernetes.default.svc/api")
+
+	cmd := exec.Command("curl", "--cacert", "${CACERT}", "--header", "Authorization: Bearer ${TOKEN}", "${APISERVER}/api")
+
 	out,err := cmd.Output()
 	if err != nil {
 		fmt.Println("could not run command: ", err)
