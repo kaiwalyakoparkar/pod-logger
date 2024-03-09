@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
 
 permissions:
   contents: write
@@ -13,7 +12,7 @@ permissions:
 
 env:
   GO_VERSION: 1.21.3
-  APP_NAME: podlogger
+  APP_NAME: pod-logger
 
 jobs:
 
@@ -93,7 +92,6 @@ jobs:
           tag_name: ${{ needs.changelog.outputs.tag }}
           prerelease: false
           draft: false
-          files: bin/*
           generate_release_notes: true
           name: ${{ needs.changelog.outputs.tag }}
           body: |
