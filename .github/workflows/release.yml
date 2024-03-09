@@ -47,7 +47,7 @@ jobs:
           git-branch: ${{ env.PR_BRANCH }}
           skip-git-pull: true
           output-file: false
-          version-file: .github/package.yaml
+          version-file: .github/package.yml
           create-summary: true
 
       - name: Create Changelog PR
