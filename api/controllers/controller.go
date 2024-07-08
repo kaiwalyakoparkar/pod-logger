@@ -2,7 +2,9 @@ package contollers
 
 import (
 	"fmt"
+	"io"
 	"net/http"
+	"os"
 	"os/exec"
 
 	"github.com/gin-gonic/gin"
@@ -16,9 +18,24 @@ func getLogs() string {
 	//Place holder command
 	// cmd := exec.Command("curl", "http://kubernetes.default.svc/api")
 
+	//cmd := exec.Command("curl", "--cacert", "${CACERT}", "--header", "Authorization: Bearer ${TOKEN}", "${APISERVER}/api")
 
+	cacert := os.Getenv("CACERT")
+	tokenPath := os.Getenv("TOKEN")
+	apiserver := os.Getenv("APISERVER")
+	tokenFile, err := os.Open(tokenPath)
+	if err != nil {
+		fmt.Println("could not open token file: ", err)
+		return ""
+	}
+	tokenData, err := io.ReadAll(tokenFile)
+	if err != nil {
+		fmt.Println("could not read token file: ", err)
+		return ""
+	}
+	// output := string(out)
+	cmd := exec.Command("curl", "--cacert", cacert, "--header", "Authorization: Bearer "+string(tokenData), apiserver+"/api")
 
-	cmd := exec.Command("curl", "--cacert", "${CACERT}", "--header", "Authorization: Bearer ${TOKEN}", "${APISERVER}/api")
 
 	out, err := cmd.Output()
 	if err != nil {
