@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"podlogger/routers"
-	"os/exec"
 )
 
 func main() {
@@ -13,11 +12,6 @@ func main() {
 	r := routers.Router()
 	
 	//Auth environments and scripts are running
-	exec.Command("chmod","+x","./scripts/auth.sh")
-
-	fmt.Println("🪪 Modified permission")
-
-	exec.Command("./scripts/auth.sh")
 	
 	fmt.Println("☸️ Kubernetes API working")
 	

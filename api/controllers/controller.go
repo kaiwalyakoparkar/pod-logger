@@ -21,8 +21,11 @@ func getLogs() string {
 	//cmd := exec.Command("curl", "--cacert", "${CACERT}", "--header", "Authorization: Bearer ${TOKEN}", "${APISERVER}/api")
 
 	cacert := os.Getenv("CACERT")
+	fmt.Println(cacert)
 	tokenPath := os.Getenv("TOKEN")
+	fmt.Println(tokenPath)
 	apiserver := os.Getenv("APISERVER")
+	fmt.Println(apiserver)
 	tokenFile, err := os.Open(tokenPath)
 	if err != nil {
 		fmt.Println("could not open token file: ", err)
