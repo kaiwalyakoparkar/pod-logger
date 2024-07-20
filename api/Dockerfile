@@ -23,7 +23,5 @@ ENV TOKEN=/var/run/secrets/kubernetes.io/serviceaccount/token
 
 ENV CACERT=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
 
-RUN chmod +x ./scripts/auth.sh
-
 # Run
 CMD ["./podlogger-api"]
