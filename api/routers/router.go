@@ -14,15 +14,5 @@ func Router() *gin.Engine {
 	router.GET("/api/status", controller.GetStatus)
 	router.GET("/", controller.Hello)
 
-	//Inline function for the same thing above
-	// router.GET("/api/logs", func(c *gin.Context) {
-	// 	c.JSON(
-	// 	  	http.StatusOK,
-	// 	  	gin.H{
-	// 			"title": "Home Page",
-	// 	  	},
-	// 	)
-	// })
-
 	return router
 }

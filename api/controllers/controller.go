@@ -6,41 +6,36 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
-
 	"github.com/gin-gonic/gin"
 )
 
 //========================= Functions =========================
 
 func getLogs() string {
-	// cmd := exec.Command("ls", "./")
-	// cmd:= exec.Command("tail", "-F", "/opt/logs.txt")
-	//Place holder command
-	// cmd := exec.Command("curl", "http://kubernetes.default.svc/api")
-
-	//cmd := exec.Command("curl", "--cacert", "${CACERT}", "--header", "Authorization: Bearer ${TOKEN}", "${APISERVER}/api")
 
 	cacert := os.Getenv("CACERT")
-	fmt.Println(cacert)
+	//fmt.Println(cacert)
 	tokenPath := os.Getenv("TOKEN")
-	fmt.Println(tokenPath)
+	//fmt.Println(tokenPath)
 	apiserver := os.Getenv("APISERVER")
-	fmt.Println(apiserver)
+	//fmt.Println(apiserver)
 	tokenFile, err := os.Open(tokenPath)
+
 	if err != nil {
 		fmt.Println("could not open token file: ", err)
 		return "Error Occured\n"
 	}
-	tokenData, err := io.ReadAll(tokenFile)
+
+	token, err := io.ReadAll(tokenFile)
 	if err != nil {
 		fmt.Println("could not read token file: ", err)
 		return "Error Occured\n"
 	}
-	// output := string(out)
-	cmd := exec.Command("curl", "--cacert", cacert, "--header", "Authorization: Bearer "+string(tokenData), apiserver+"/api")
 
+	cmd := exec.Command("curl", "--cacert", cacert, "--header", "Authorization: Bearer "+string(token), apiserver+"/api")
 
 	out, err := cmd.Output()
+	
 	if err != nil {
 		fmt.Println("could not run command: ", err)
 	} else {
@@ -51,10 +46,6 @@ func getLogs() string {
 }
 
 func getStatus() string {
-	//This command gives the status of the kubernetes api
-
-	// cmd := exec.Command("curl", "--cacert", "${CACERT}", "--header", "Authorization: Bearer ${TOKEN}", "${APISERVER}/api/v1/namespaces/default/pods/ ")
-
 	smt := exec.Command("chmod","+x","../scripts/auth.sh")
 	cmd := exec.Command("../scripts/auth.sh")
 
