@@ -35,7 +35,7 @@ func getLogs() string {
 	cmd := exec.Command("curl", "--cacert", cacert, "--header", "Authorization: Bearer "+string(token), apiserver+"/api")
 
 	out, err := cmd.Output()
-	
+
 	if err != nil {
 		fmt.Println("could not run command: ", err)
 	} else {
@@ -46,13 +46,32 @@ func getLogs() string {
 }
 
 func getStatus() string {
-	smt := exec.Command("chmod","+x","../scripts/auth.sh")
-	cmd := exec.Command("../scripts/auth.sh")
+	cacert := os.Getenv("CACERT")
+	//fmt.Println(cacert)
+	tokenPath := os.Getenv("TOKEN")
+	//fmt.Println(tokenPath)
+	apiserver := os.Getenv("APISERVER")
+	ns := os.Getenv("NS")
+	//fmt.Println(apiserver)
+	tokenFile, err := os.Open(tokenPath)
 
-	out,err := cmd.Output()
+	if err != nil {
+		fmt.Println("could not open token file: ", err)
+		return "Error Occured\n"
+	}
+
+	token, err := io.ReadAll(tokenFile)
+	if err != nil {
+		fmt.Println("could not read token file: ", err)
+		return "Error Occured\n"
+	}
+
+	cmd := exec.Command("curl", "--cacert", cacert, "--header", "Authorization: Bearer "+string(token), apiserver+"/api/v1/namespaces/"+ns,"/pods | jq '.items[].metadata.name'")
+
+	out, err := cmd.Output()
+	
 	if err != nil {
 		fmt.Println("could not run command: ", err)
-		fmt.Println(smt)
 	} else {
 		fmt.Println("Output: \n", string(out))
 	}
