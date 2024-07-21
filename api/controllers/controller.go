@@ -51,7 +51,7 @@ func getStatus() string {
 	tokenPath := os.Getenv("TOKEN")
 	//fmt.Println(tokenPath)
 	apiserver := os.Getenv("APISERVER")
-	ns := os.Getenv("NS")
+	//ns := os.Getenv("NS")
 	//fmt.Println(apiserver)
 	tokenFile, err := os.Open(tokenPath)
 
