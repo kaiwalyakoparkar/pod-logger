@@ -66,7 +66,7 @@ func getStatus() string {
 		return "Error Occured\n"
 	}
 
-	cmd := exec.Command("curl", "--cacert", cacert, "--header", "Authorization: Bearer "+string(token), apiserver+"/api/v1/namespaces/"+ns,"/pods | jq '.items[].metadata.name'")
+	cmd := exec.Command("curl", "--cacert", cacert, "--header", "Authorization: Bearer "+string(token), apiserver+"/api/v1/namespaces/default/pods | jq '.items[].metadata.name'")
 
 	out, err := cmd.Output()
 	
