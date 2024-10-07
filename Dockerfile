@@ -23,5 +23,7 @@ ENV TOKEN=/var/run/secrets/kubernetes.io/serviceaccount/token
 
 ENV CACERT=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
 
+ENV PN=logger
+
 # Run
 CMD ["./podlogger-api"]
