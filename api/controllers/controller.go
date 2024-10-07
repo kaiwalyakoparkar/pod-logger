@@ -1,11 +1,13 @@
 package contollers
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"net/http"
 	"os"
 	"os/exec"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -109,6 +111,18 @@ func listPods() string {
 
 	cmd := exec.Command("curl", "--cacert", cacert, "--header", "Authorization: Bearer "+string(token), apiserver+"/api/v1/namespaces/"+ns+"/pods | jq '.items[].metadata.name'")
 
+	//Little effort
+
+	var curlOutput bytes.Buffer
+	cmd.Stdout = &curlOutput
+
+	jqCmd := exec.Command("jq", ".items[].metadata.name")
+	jqCmd.Stdin = &curlOutput // Pipe the output of curl to jq
+	var jqOutput bytes.Buffer
+	jqCmd.Stdout = &jqOutput
+
+	// ==========
+
 	out, err := cmd.Output()
 	
 	if err != nil {
@@ -116,7 +130,8 @@ func listPods() string {
 	} else {
 		fmt.Println("Output: \n", string(out))
 	}
-	output := string(out)
+	// output := string(out)
+	output := jqOutput.String()
 	return output
 }
 
