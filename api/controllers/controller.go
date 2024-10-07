@@ -14,12 +14,8 @@ import (
 func getLogs() string {
 
 	cacert := os.Getenv("CACERT")
-	//fmt.Println(cacert)
 	tokenPath := os.Getenv("TOKEN")
-	//fmt.Println(tokenPath)
 	apiserver := os.Getenv("APISERVER")
-	//fmt.Println(apiserver)
-
 	pn := os.Getenv("PN")
 
 	tokenFile, err := os.Open(tokenPath)
@@ -35,7 +31,6 @@ func getLogs() string {
 		return "Error Occured\n"
 	}
 
-	// cmd := exec.Command("curl", "--cacert", cacert, "--header", "Authorization: Bearer "+string(token), apiserver+"/api")
 	cmd := exec.Command("curl", "--cacert", cacert, "--header", "Authorization: Bearer "+string(token), apiserver+"/api/v1/namespaces/default/pods/"+pn+"/log")
 
 	out, err := cmd.Output()
@@ -51,12 +46,9 @@ func getLogs() string {
 
 func getStatus() string {
 	cacert := os.Getenv("CACERT")
-	//fmt.Println(cacert)
 	tokenPath := os.Getenv("TOKEN")
-	//fmt.Println(tokenPath)
 	apiserver := os.Getenv("APISERVER")
-	//ns := os.Getenv("NS")
-	//fmt.Println(apiserver)
+
 	tokenFile, err := os.Open(tokenPath)
 
 	if err != nil {
@@ -70,7 +62,7 @@ func getStatus() string {
 		return "Error Occured\n"
 	}
 
-	cmd := exec.Command("curl", "--cacert", cacert, "--header", "Authorization: Bearer "+string(token), apiserver+"/api/v1/namespaces/default/pods | jq '.items[].metadata.name'")
+	cmd := exec.Command("curl", "--cacert", cacert, "--header", "Authorization: Bearer "+string(token), apiserver+"/api/v1/namespaces/default/pods")
 
 	out, err := cmd.Output()
 	
@@ -89,13 +81,76 @@ func getEnvs() string {
 	out, err := cmd.Output()
 	if err != nil {
 		fmt.Println("could not run command: ", err)
-		} else {
-			fmt.Println("Output: \n", string(out))
-		}
+	} else {
+		fmt.Println("Output: \n", string(out))
+	}
 		output := string(out)
 		return output
+}
+
+func listPods() string {
+	cacert := os.Getenv("CACERT")
+	tokenPath := os.Getenv("TOKEN")
+	apiserver := os.Getenv("APISERVER")
+	ns := os.Getenv("NS")
+
+	tokenFile, err := os.Open(tokenPath)
+
+	if err != nil {
+		fmt.Println("could not open token file: ", err)
+		return "Error Occured\n"
 	}
+
+	token, err := io.ReadAll(tokenFile)
+	if err != nil {
+		fmt.Println("could not read token file: ", err)
+		return "Error Occured\n"
+	}
+
+	cmd := exec.Command("curl", "--cacert", cacert, "--header", "Authorization: Bearer "+string(token), apiserver+"/api/v1/namespaces/"+ns+"/pods | jq '.items[].metadata.name'")
+
+	out, err := cmd.Output()
 	
+	if err != nil {
+		fmt.Println("could not run command: ", err)
+	} else {
+		fmt.Println("Output: \n", string(out))
+	}
+	output := string(out)
+	return output
+}
+
+func listNamespaces() string {
+	cacert := os.Getenv("CACERT")
+	tokenPath := os.Getenv("TOKEN")
+	apiserver := os.Getenv("APISERVER")
+
+	tokenFile, err := os.Open(tokenPath)
+
+	if err != nil {
+		fmt.Println("could not open token file: ", err)
+		return "Error Occured\n"
+	}
+
+	token, err := io.ReadAll(tokenFile)
+	if err != nil {
+		fmt.Println("could not read token file: ", err)
+		return "Error Occured\n"
+	}
+
+	cmd := exec.Command("curl", "--cacert", cacert, "--header", "Authorization: Bearer "+string(token), apiserver+"/api/v1/namespaces | jq '.items[].metadata.name'")
+
+	out, err := cmd.Output()
+	
+	if err != nil {
+		fmt.Println("could not run command: ", err)
+	} else {
+		fmt.Println("Output: \n", string(out))
+	}
+	output := string(out)
+	return output
+}
+
 //========================= Handlers =========================
 
 func GetLogs(g *gin.Context) {
@@ -114,6 +169,20 @@ func GetStatus(g *gin.Context) {
 
 func GetEnv(g *gin.Context) {
 	output := getEnvs()
+	g.IndentedJSON(http.StatusOK, gin.H{
+		"env": output,
+	})
+}
+
+func ListPods(g *gin.Context) {
+	output := listPods()
+	g.IndentedJSON(http.StatusOK, gin.H{
+		"env": output,
+	})
+}
+
+func ListNamespaces(g *gin.Context) {
+	output := listNamespaces()
 	g.IndentedJSON(http.StatusOK, gin.H{
 		"env": output,
 	})

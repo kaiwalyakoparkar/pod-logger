@@ -25,5 +25,7 @@ ENV CACERT=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
 
 ENV PN logger
 
+ENV NS default
+
 # Run
 CMD ["./podlogger-api"]
