@@ -32,7 +32,8 @@ func getLogs() string {
 		return "Error Occured\n"
 	}
 
-	cmd := exec.Command("curl", "--cacert", cacert, "--header", "Authorization: Bearer "+string(token), apiserver+"/api")
+	// cmd := exec.Command("curl", "--cacert", cacert, "--header", "Authorization: Bearer "+string(token), apiserver+"/api")
+	cmd := exec.Command("curl", "--cacert", cacert, "--header", "Authorization: Bearer "+string(token), apiserver+"/api/v1/namespaces/default/pods")
 
 	out, err := cmd.Output()
 
