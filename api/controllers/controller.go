@@ -111,18 +111,6 @@ func listPods() string {
 
 	cmd := exec.Command("curl", "--cacert", cacert, "--header", "Authorization: Bearer "+string(token), apiserver+"/api/v1/namespaces/"+ns+"/pods")
 
-	//Little effort
-
-	var curlOutput bytes.Buffer
-	cmd.Stdout = &curlOutput
-
-	jqCmd := exec.Command("jq", ".items[].metadata.name")
-	jqCmd.Stdin = &curlOutput // Pipe the output of curl to jq
-	var jqOutput bytes.Buffer
-	jqCmd.Stdout = &jqOutput
-
-	// ==========
-
 	out, err := cmd.Output()
 	
 	if err != nil {
@@ -130,8 +118,7 @@ func listPods() string {
 	} else {
 		fmt.Println("Output: \n", string(out))
 	}
-	// output := string(out)
-	output := jqOutput.String()
+	output := string(out)
 	return output
 }
 
