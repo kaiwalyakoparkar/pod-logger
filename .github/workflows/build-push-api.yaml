@@ -34,6 +34,6 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./api/
-          tags: ${{ steps.meta.outputs.tags }},latest
+          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           push: true
