@@ -18,6 +18,7 @@ jobs:
         with:
           tags: |
             type=sha, prefix=v1-
+            latest
           images: kaiwalyakoparkar/podlogger-api
       
       - name: Log in to Docker Hub
