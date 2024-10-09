@@ -1,5 +1,5 @@
 ---
-name: build and push docker image
+name: build and push api docker image
 on:
   push
 
@@ -37,29 +37,3 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           push: true
-      
-      - name: Docker meta
-        id: meta2
-        uses: docker/metadata-action@v4
-        with:
-          tags: |
-            type=sha, prefix=v1-
-          images: kaiwalyakoparkar/podlogger-web
-      
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: kaiwalyakoparkar/podlogger-web
-          tag_with_ref: true
-          add_git_labels: true
-          tag_with_sha: true
-      
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v2
-        with:
-          context: ./web/
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          push: true 
