@@ -1,7 +1,6 @@
 package contollers
 
 import (
-	"bytes"
 	"fmt"
 	"io"
 	"net/http"

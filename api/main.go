@@ -19,5 +19,5 @@ func main() {
 
 	fmt.Println("🚚 Starting server")
 
-	log.Fatal(r.Run("localhost:8080"))
+	log.Fatal(r.Run("0.0.0.0:8080"))
 }
