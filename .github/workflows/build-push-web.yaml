@@ -34,6 +34,6 @@
           uses: docker/build-push-action@v2
           with:
             context: ./web/
-            tags: ${{ steps.meta.outputs.tags }}
+            tags: ${{ steps.meta.outputs.tags }},latest
             labels: ${{ steps.meta.outputs.labels }}
             push: true

@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   web:
-    image: nginx:alpine
+    image: kaiwalyakoparkar/podlogger-web
     container_name: web
     ports:
       - "80:80"
@@ -14,7 +14,7 @@ services:
       - app-network
 
   api:
-    image: kaiwalyakoparkar/podlogger-api:v1-1b17e77
+    image: kaiwalyakoparkar/podlogger-api
     container_name: api
     ports:
       - "8080:8080"
