@@ -139,7 +139,7 @@ func listNamespaces() string {
 		return "Error Occured\n"
 	}
 
-	cmd := exec.Command("curl", "--cacert", cacert, "--header", "Authorization: Bearer "+string(token), apiserver+"/api/v1/namespaces")
+	cmd := exec.Command("curl", "--cacert", cacert, "--header", "Authorization: Bearer "+string(token), apiserver+"/api/v1/namespaces | jq -r '.items[].metadata.name'")
 
 	out, err := cmd.Output()
 	
