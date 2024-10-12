@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"encoding/json"
 
 	"github.com/gin-gonic/gin"
 )
@@ -130,13 +131,13 @@ func listNamespaces() []byte {
 
 	if err != nil {
 		fmt.Println("could not open token file: ", err)
-		return []byte("Error Occured\n")
+		return jsonError("Error Occured", err)
 	}
 
 	token, err := io.ReadAll(tokenFile)
 	if err != nil {
 		fmt.Println("could not read token file: ", err)
-		return []byte("Error Occured\n")
+		return jsonError("Error Occured", err)
 	}
 
 	cmd := exec.Command("curl", "--cacert", cacert, "--header", "Authorization: Bearer "+string(token), apiserver+"/api/v1/namespaces")
@@ -151,6 +152,18 @@ func listNamespaces() []byte {
 	// output := string(out)
 	output := out
 	return output
+}
+
+//========================= Error Handling =========================
+
+// Helper function to return error as JSON
+func jsonError(message string, err error) []byte {
+	errorResponse := map[string]string{"error": message}
+	if err != nil {
+		errorResponse["details"] = err.Error()
+	}
+	jsonErr, _ := json.Marshal(errorResponse)
+	return jsonErr
 }
 
 //========================= Handlers =========================
