@@ -6,8 +6,6 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
-	"encoding/json"
-	// "encoding/base64"
 
 	"github.com/gin-gonic/gin"
 )
@@ -124,8 +122,7 @@ func listPods() string {
 }
 
 
-//===============================================================
-func listNamespaces() []byte {
+func listNamespaces() string {
 	cacert := os.Getenv("CACERT")
 	tokenPath := os.Getenv("TOKEN")
 	apiserver := os.Getenv("APISERVER")
@@ -134,13 +131,13 @@ func listNamespaces() []byte {
 
 	if err != nil {
 		fmt.Println("could not open token file: ", err)
-		return jsonError("Error Occured", err)
+		return "Error Occured\n"
 	}
 
 	token, err := io.ReadAll(tokenFile)
 	if err != nil {
 		fmt.Println("could not read token file: ", err)
-		return jsonError("Error Occured", err)
+		return "Error Occured\n"
 	}
 
 	cmd := exec.Command("curl", "--cacert", cacert, "--header", "Authorization: Bearer "+string(token), apiserver+"/api/v1/namespaces")
@@ -153,41 +150,9 @@ func listNamespaces() []byte {
 		fmt.Println("Output: \n", string(out))
 	}
 
-	// if !isValidJSON(out) {
-	// 	return jsonError("Invalid JSON response from API", nil)
-	// }
-
-	// output := string(out)
-	output := out
-	// output, err := base64.StdEncoding.DecodeString(string(out))
-
-	// if err != nil {
-	// 	fmt.Println("could not run command: ", err)
-	// }
-
+	output := string(out)
 	return output
 }
-
-//===============================================================
-
-
-//========================= Error Handling =========================
-
-// Helper function to return error as JSON
-func jsonError(message string, err error) []byte {
-	errorResponse := map[string]string{"error": message}
-	if err != nil {
-		errorResponse["details"] = err.Error()
-	}
-	jsonErr, _ := json.Marshal(errorResponse)
-	return jsonErr
-}
-
-// Helper function to check if the output is valid JSON
-// func isValidJSON(data []byte) bool {
-// 	var js json.RawMessage
-// 	return json.Unmarshal(data, &js) == nil
-// }
 
 //========================= Handlers =========================
 
