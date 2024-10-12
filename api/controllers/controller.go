@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/exec"
 	"encoding/json"
+	"encoding/base64"
 
 	"github.com/gin-gonic/gin"
 )
@@ -122,6 +123,8 @@ func listPods() string {
 	return output
 }
 
+
+//===============================================================
 func listNamespaces() []byte {
 	cacert := os.Getenv("CACERT")
 	tokenPath := os.Getenv("TOKEN")
@@ -153,11 +156,20 @@ func listNamespaces() []byte {
 	if !isValidJSON(out) {
 		return jsonError("Invalid JSON response from API", nil)
 	}
-	
+
 	// output := string(out)
-	output := out
+	// output := out
+	output, err := base64.StdEncoding.DecodeString(string(out))
+
+	if err != nil {
+		fmt.Println("could not run command: ", err)
+	}
+
 	return output
 }
+
+//===============================================================
+
 
 //========================= Error Handling =========================
 
