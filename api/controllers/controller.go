@@ -153,9 +153,9 @@ func listNamespaces() []byte {
 		fmt.Println("Output: \n", string(out))
 	}
 
-	if !isValidJSON(out) {
-		return jsonError("Invalid JSON response from API", nil)
-	}
+	// if !isValidJSON(out) {
+	// 	return jsonError("Invalid JSON response from API", nil)
+	// }
 
 	// output := string(out)
 	output := out
@@ -184,10 +184,10 @@ func jsonError(message string, err error) []byte {
 }
 
 // Helper function to check if the output is valid JSON
-func isValidJSON(data []byte) bool {
-	var js json.RawMessage
-	return json.Unmarshal(data, &js) == nil
-}
+// func isValidJSON(data []byte) bool {
+// 	var js json.RawMessage
+// 	return json.Unmarshal(data, &js) == nil
+// }
 
 //========================= Handlers =========================
 
