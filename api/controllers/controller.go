@@ -7,7 +7,7 @@ import (
 	"os"
 	"os/exec"
 	"encoding/json"
-	"encoding/base64"
+	// "encoding/base64"
 
 	"github.com/gin-gonic/gin"
 )
@@ -143,7 +143,7 @@ func listNamespaces() []byte {
 		return jsonError("Error Occured", err)
 	}
 
-	cmd := exec.Command("curl", "--cacert", cacert, "--header", "Authorization: Bearer "+string(token), apiserver+"/api/v1/namespaces")
+	cmd := exec.Command("curl", "--cacert", cacert, "--header", "Authorization: Bearer "+string(token), apiserver+"/api/v1/namespaces | jq -r '.items[].metadata.name'")
 
 	out, err := cmd.Output()
 	
@@ -158,12 +158,12 @@ func listNamespaces() []byte {
 	}
 
 	// output := string(out)
-	// output := out
-	output, err := base64.StdEncoding.DecodeString(string(out))
+	output := out
+	// output, err := base64.StdEncoding.DecodeString(string(out))
 
-	if err != nil {
-		fmt.Println("could not run command: ", err)
-	}
+	// if err != nil {
+	// 	fmt.Println("could not run command: ", err)
+	// }
 
 	return output
 }
