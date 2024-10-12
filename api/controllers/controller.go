@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"encoding/json"
 
 	"github.com/gin-gonic/gin"
 )
@@ -121,7 +122,7 @@ func listPods() string {
 	return output
 }
 
-func listNamespaces() string {
+func listNamespaces() []byte {
 	cacert := os.Getenv("CACERT")
 	tokenPath := os.Getenv("TOKEN")
 	apiserver := os.Getenv("APISERVER")
@@ -130,16 +131,16 @@ func listNamespaces() string {
 
 	if err != nil {
 		fmt.Println("could not open token file: ", err)
-		return "Error Occured\n"
+		return []byte("Error Occured\n")
 	}
 
 	token, err := io.ReadAll(tokenFile)
 	if err != nil {
 		fmt.Println("could not read token file: ", err)
-		return "Error Occured\n"
+		return []byte("Error Occured\n")
 	}
 
-	cmd := exec.Command("curl", "--cacert", cacert, "--header", "Authorization: Bearer "+string(token), apiserver+"/api/v1/namespaces| grep -o '\"name\": \"[^\"]*' | grep -o '[^\"]*$'")
+	cmd := exec.Command("curl", "--cacert", cacert, "--header", "Authorization: Bearer "+string(token), apiserver+"/api/v1/namespaces | jq .items[].metadata.name")
 
 	out, err := cmd.Output()
 	
@@ -148,7 +149,8 @@ func listNamespaces() string {
 	} else {
 		fmt.Println("Output: \n", string(out))
 	}
-	output := string(out)
+	// output := string(out)
+	output := out
 	return output
 }
 
