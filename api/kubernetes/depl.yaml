@@ -1,34 +1,52 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: myapp
+  name: podlogger
   labels:
-    app: myapp
+    app: podlogger
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: myapp
+      app: podlogger
   template:
     metadata:
       labels:
-        app: myapp
+        app: podlogger
     spec:
       containers:
-        - name: myapp
-          image: alpine:latest
-          command: ['sh', '-c', 'while true; do echo "logging" >> /opt/logs.txt; sleep 1; done']
-          volumeMounts:
-            - name: data
-              mountPath: /opt
-      initContainers:
-        - name: logshipper
-          image: alpine:latest
-          restartPolicy: Always
-          command: ['sh', '-c', 'tail -F /opt/logs.txt']
-          volumeMounts:
-            - name: data
-              mountPath: /opt
-      volumes:
-        - name: data
-          emptyDir: {}
+        - name: web
+          image: kaiwalyakoparkar/podlogger-web
+          ports:
+          - containerPort: 80
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+        - name: api
+          image:  kaiwalyakoparkar/podlogger-api
+          ports:
+          - containerPort: 8080
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: podlogger-service
+spec:
+  type: NodePort
+  selector:
+    app: podlogger
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30000
