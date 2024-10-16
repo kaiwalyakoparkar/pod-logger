@@ -2,14 +2,26 @@ package routers
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/gin-contrib/cors"
 	controller "podlogger/controllers"
+	"time"
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
 )
 
 func Router() *gin.Engine {
 	router := gin.Default()
-	router.Use(cors.Default())
+	
+	// Configure CORS to allow all origins
+	config := cors.Config{
+		AllowOrigins:     []string{"*"}, 
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"}, 
+		AllowHeaders:     []string{"Origin", "Content-Type", "Accept"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: false,  
+		MaxAge: 12 * time.Hour, 
+	}
+
+router.Use(cors.New(config))
 
 	fmt.Println("🎉 Server started")
 	router.GET("/api/logs", controller.GetLogs)
