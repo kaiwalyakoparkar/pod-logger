@@ -13,12 +13,12 @@ func Router() *gin.Engine {
 	
 	// Configure CORS to allow all origins
 	config := cors.Config{
-		AllowOrigins:     []string{"*"}, 
-		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"}, 
+		AllowAllOrigins:  true,
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept"},
 		ExposeHeaders:    []string{"Content-Length"},
-		AllowCredentials: false,  
-		MaxAge: 12 * time.Hour, 
+		AllowCredentials: false,
+		MaxAge:           12 * time.Hour,
 	}
 
 router.Use(cors.New(config))
