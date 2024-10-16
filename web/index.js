@@ -15,16 +15,16 @@ async function fetchData() {
 //Fetches the namespaces data
 async function fetchNsData() {
   try {
-      // const response = await fetch('http://localhost:8080/api/listNs');
+      const response = await fetch('http://localhost:8080/api/listNs');
 
-      // if (!response.ok) {
-      //     throw new Error(`HTTP error! status: ${response.status}`);
-      // }
+      if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
-      // const jsonData = await response.json();
+      const jsonData = await response.json();
 
-      //=====Test data for local testing=====
-      const jsonData = await fetch('../data/ns.txt').then(response => response.json());
+    //=====Test data for local testing=====
+    //   const jsonData = await fetch('../data/ns.txt').then(response => response.json());
 
       // Decode the JSON data from the "env" field and extract names
       const namespaces = JSON.parse(jsonData.env);
@@ -41,16 +41,16 @@ async function fetchNsData() {
 //Fetches the pods data
 async function fetchPodsData() {
   try {
-      // const response = await fetch('http://localhost:8080/api/listPods');
+      const response = await fetch('http://localhost:8080/api/listPods');
 
-      // if (!response.ok) {
-      //     throw new Error(`HTTP error! status: ${response.status}`);
-      // }
+      if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
-      // const jsonData = await response.json();
+      const jsonData = await response.json();
 
       //=====Test data for local testing=====
-      const jsonData = await fetch('../data/pods.txt').then(response => response.json());
+    //   const jsonData = await fetch('../data/pods.txt').then(response => response.json());
 
       // Decode the JSON data from the "env" field and extract names
       const pods = JSON.parse(jsonData.env);
