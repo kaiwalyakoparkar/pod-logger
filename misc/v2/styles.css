@@ -1,0 +1,252 @@
+:root {
+  --primary-bg: #212121;
+  --secondary-bg: #141414;
+  --tertiary-bg: #181818;
+  --border-color: #242424;
+  --text-primary: #ffffff;
+  --text-secondary: #c6c6c6;
+  --text-tertiary: #4c4c4c;
+  --accent-color: #813c00;
+  --orange-color: #ff6b00;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: var(--primary-bg);
+  color: var(--text-primary);
+  height: 100vh;
+  overflow: hidden;
+}
+
+.screen-2 {
+  height: 100vh;
+  padding: 20px;
+}
+
+.container {
+  display: flex;
+  height: 100%;
+  gap: 20px;
+}
+
+.sidebar {
+  width: 300px;
+  background-color: var(--secondary-bg);
+  border-right: 3px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.sidebar-header {
+  padding: 20px;
+}
+
+.logo-section {
+  background-color: var(--tertiary-bg);
+  border-radius: 10px;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.logo-img {
+  width: 46px;
+  height: 46px;
+  object-fit: contain;
+}
+
+.logo-text {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.namespace-selector {
+  margin: 20px 0;
+  position: relative;
+}
+
+.namespace-dropdown {
+  width: 100%;
+  padding: 15px;
+  background-color: var(--tertiary-bg);
+  border: 1px solid #343434;
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-size: 16px;
+  cursor: pointer;
+  appearance: none;
+}
+
+.dropdown-icon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-primary);
+  pointer-events: none;
+  font-size: 12px;
+}
+
+.pod-list {
+  margin-top: 20px;
+}
+
+.pod-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px;
+  background-color: #0e0e0e;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.pod-item:hover,
+.pod-item.active {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.pod-icon {
+  width: 28px;
+  height: 28px;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+}
+
+.user-welcome {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.avatar {
+  width: 57px;
+  height: 57px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.user-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.welcome-text h2 {
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+
+.welcome-text p {
+  color: var(--text-tertiary);
+}
+
+.header-actions {
+  display: flex;
+  gap: 20px;
+}
+
+.btn-lorem,
+.btn-ask-chatgpt {
+  padding: 15px 30px;
+  border-radius: 10px;
+  border: 1px solid #343434;
+  background-color: var(--tertiary-bg);
+  color: var(--text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: background-color 0.2s;
+}
+
+.btn-ask-chatgpt {
+  background-color: var(--orange-color);
+  border: none;
+}
+
+.btn-ask-chatgpt:hover {
+  background-color: var(--accent-color);
+}
+
+.plus-icon {
+  font-size: 20px;
+}
+
+.selected-path {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px;
+  background-color: var(--tertiary-bg);
+  border-radius: 36px;
+  border: 1px solid #4e4e4e;
+  margin: 20px 0;
+  color: #9c9c9c;
+}
+
+.logs-window {
+  flex: 1;
+  background-color: var(--secondary-bg);
+  border-radius: 10px;
+  padding: 20px;
+  overflow-y: auto;
+  height: calc(100vh - 250px);
+}
+
+.logs-content {
+  font-family: monospace;
+  white-space: pre-wrap;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.user-profile {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.username {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.user-id {
+  color: var(--text-tertiary);
+  font-size: 16px;
+}
+
+.path-separator {
+  width: 12px;
+  height: 12px;
+}

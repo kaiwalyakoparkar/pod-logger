@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pod Logger Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="screen-2">
+        <div class="container">
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <div class="logo-section">
+                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/e39e9758608fc195dc58ba7410527241394a556f42641fa933ee23b2a9d9ae74?placeholderIfAbsent=true&apiKey=2521ff3747ac468ab7c6a91eb8d47d87" alt="Pod Logger Logo" class="logo-img">
+                        <h1 class="logo-text">POD LOGGER</h1>
+                    </div>
+                    <div class="namespace-selector">
+                        <select id="namespaceSelect" class="namespace-dropdown" aria-label="Select namespace">
+                            <option value="">Select Namespace</option>
+                        </select>
+                        <span class="dropdown-icon">▼</span>
+                    </div>
+                    <div id="podList" class="pod-list"></div>
+                </div>
+                <div class="sidebar-footer">
+                    <div class="user-profile">
+                        <div class="avatar">
+                            <img src="./image.png" alt="User avatar" class="user-avatar">
+                        </div>
+                        <div class="user-info">
+                            <span class="username">User</span>
+                            <span class="user-id">#id987654321</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+            <main class="main-content">
+                <header class="main-header">
+                    <div class="user-welcome">
+                        <div class="avatar">
+                            <img src="./image.png" alt="User avatar" class="user-avatar">
+                        </div>
+                        <div class="welcome-text">
+                            <h2>User</h2>
+                            <p>Welcome Back to Pod Logger!</p>
+                        </div>
+                    </div>
+                    <div class="header-actions">
+                        <button class="btn-lorem">
+                          Lorem
+                        </button>
+                        <button class="btn-ask-chatgpt" type="button">
+                          <img src="./chatgpt.svg" alt="" height="30px" width="30px" aria-hidden="true">
+                          Ask ChatGPT
+                        </button>
+                    </div>
+                </header>
+                <div class="content-area">
+                    <div class="selected-path">
+                        <span id="currentNamespace">Select Namespace</span>
+                        <img src="https://cdn.builder.io/api/v1/image/assets/TEMP/617da7f89ac7a349e21c0a56d4bbb18277f2663338555ef7209cf080a45384f5?placeholderIfAbsent=true&apiKey=2521ff3747ac468ab7c6a91eb8d47d87" alt="" class="path-separator">
+                        <span id="currentPod">Select Pod</span>
+                    </div>
+                    <div id="logsContainer" class="logs-window">
+                        <pre id="logsContent" class="logs-content"></pre>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
