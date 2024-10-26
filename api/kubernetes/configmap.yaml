@@ -3,5 +3,5 @@ kind: ConfigMap
 metadata:
   name: logger-config
 data:
-  PN: "podlogger"
+  PN: "testLogger"
   NS: "default"
