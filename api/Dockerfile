@@ -23,7 +23,7 @@ ENV TOKEN=/var/run/secrets/kubernetes.io/serviceaccount/token
 
 ENV CACERT=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
 
-ENV PN logger
+ENV PN podlogger
 
 ENV NS default
 
