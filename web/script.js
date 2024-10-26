@@ -50,10 +50,12 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function showPodLogs(namespace, podName) {
-        const pod = namespaceData[namespace].pods.find(p => p.id === podId);
-        if (pod) {
-            logsContent.textContent = pod.logs;
-        }
+        const pod = fetchLogs(namespace, podName);
+
+        pod.then(data => {
+            console.log(data);
+            logsContent.textContent = data;
+        })
     }
 
     //Fetching pods after receieving selected namespace
@@ -62,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log(selectedNamespace)//testing OK
         if (selectedNamespace) {
             updatePodList(selectedNamespace);
-            currentNamespace.textContent = namespaceData[selectedNamespace].name;
+            currentNamespace.textContent = selectedNamespace;
             currentPod.textContent = 'Select Pod';
             logsContent.textContent = '';
         }
@@ -73,14 +75,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 
-function fetchLogs() {
+function fetchLogs(namespace, podName) {
     return fetch('http://localhost:8081/api/logs')
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text(); // Parse the JSON directly
+        })
         .then(data => {
-            console.log(data);
+            data = JSON.parse(data);
+            data = data.output;
+            return data; 
         })
         .catch(error => {
-            console.error('Error fetching logs:', error);
+            console.error('Error listing namespaces: ', error);
         });
 }
 
@@ -115,9 +124,8 @@ function fetchNamespaces() {
         })
         .then(data => {
             data = JSON.parse(data);
-            // console.log(data.env);
             data = data.env;
-            return data; // Return the modified data
+            return data; 
         })
         .catch(error => {
             console.error('Error listing namespaces: ', error);
