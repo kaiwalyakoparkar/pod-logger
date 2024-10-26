@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "testlogger"
+spec:
+  containers:
+  - name: "testlogger-container"
+    image: busybox
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+    command: ["/bin/sh", "-c"]
+    args: ["while true; do echo 'Log entry at $(date): $(shuf -n 1 /usr/share/dict/words)'; sleep 5; done"]
