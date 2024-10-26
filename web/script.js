@@ -5,10 +5,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const logsContent = document.getElementById('logsContent');
     const currentNamespace = document.getElementById('currentNamespace');
     const currentPod = document.getElementById('currentPod');
+    const refreshButton = document.getElementById('refreshButton');
 
     //Fetching Namespaces and processing them for options
-    let namespaces = fetchNamespaces();
-    namespaces.then(data => {
+    let namespaceData = fetchNamespaces();
+    namespaceData.then(data => {
         data = JSON.parse(data);
 
         for (let ns of data.items) {
@@ -53,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const pod = fetchLogs(namespace, podName);
 
         pod.then(data => {
-            console.log(data);
+            // console.log("Log data updated!");
             logsContent.textContent = data;
         })
     }
@@ -72,7 +73,10 @@ document.addEventListener('DOMContentLoaded', function () {
   
     logsContent.textContent = 'Select a namespace and pod to view logs';
 
-
+    //Refresh Button event listener
+    refreshButton.addEventListener('click', () => {
+        showPodLogs()
+    });
 });
 
 function fetchLogs(namespace, podName) {
