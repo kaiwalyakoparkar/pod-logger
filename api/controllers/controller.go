@@ -89,11 +89,13 @@ func getEnvs() string {
 		return output
 }
 
-func listPods() string {
+func listPods(pod *gin.Context) string {
 	cacert := os.Getenv("CACERT")
 	tokenPath := os.Getenv("TOKEN")
 	apiserver := os.Getenv("APISERVER")
-	ns := os.Getenv("NS")
+	ns := pod.Query("namespace")
+
+	fmt.Println("Namespace: ", ns)
 
 	tokenFile, err := os.Open(tokenPath)
 
@@ -178,7 +180,7 @@ func GetEnv(g *gin.Context) {
 }
 
 func ListPods(g *gin.Context) {
-	output := listPods()
+	output := listPods(g)
 	g.IndentedJSON(http.StatusOK, gin.H{
 		"env": output,
 	})
