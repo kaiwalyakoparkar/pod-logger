@@ -24,10 +24,10 @@ document.addEventListener('DOMContentLoaded', function () {
     function updatePodList(namespace) {
         podList.innerHTML = '';
         if (!namespace) return;
-  
+
         let podsData = fetchPods(namespace);
         podsData.then(data => {
-            data = JSON.parse(data); //OK till here
+            data = JSON.parse(data);
 
             data.items.forEach(pod => {
                 let podElement = document.createElement('div');
@@ -47,6 +47,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 podList.appendChild(podElement);
             })
+        }).catch(error => {
+            logsContent.textContent = "No pods/logs found or you don't have access to the namespace";
         });
     }
 
@@ -70,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function () {
             logsContent.textContent = '';
         }
     });
-  
+
     logsContent.textContent = 'Select a namespace and pod to view logs';
 
     //Refresh Button event listener
@@ -98,7 +100,7 @@ function fetchLogs(namespace, podName) {
 }
 
 function fetchPods(namespace) {
-    return fetch('http://localhost:8081/api/listPods')
+    return fetch('http://localhost:8081/api/listPods?namespace=' + namespace)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
