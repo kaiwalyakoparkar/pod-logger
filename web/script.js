@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function fetchLogs(namespace, podName) {
-    return fetch('http://localhost:8081/api/logs')
+    return fetch('http://localhost:8081/api/logs?namespace=' + namespace + '&pod=' + podName)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');

@@ -12,12 +12,13 @@ import (
 
 //========================= Functions =========================
 
-func getLogs() string {
+func getLogs(l *gin.Context) string {
 
 	cacert := os.Getenv("CACERT")
 	tokenPath := os.Getenv("TOKEN")
 	apiserver := os.Getenv("APISERVER")
-	pn := os.Getenv("PN")
+	podName := l.Query("pod")
+	namespace := l.Query("namespace")
 
 	tokenFile, err := os.Open(tokenPath)
 
@@ -32,7 +33,7 @@ func getLogs() string {
 		return "Error Occured\n"
 	}
 
-	cmd := exec.Command("curl", "--cacert", cacert, "--header", "Authorization: Bearer "+string(token), apiserver+"/api/v1/namespaces/default/pods/"+pn+"/log")
+	cmd := exec.Command("curl", "--cacert", cacert, "--header", "Authorization: Bearer "+string(token), apiserver+"/api/v1/namespaces/"+namespace+"/pods/"+podName+"/log")
 
 	out, err := cmd.Output()
 
@@ -95,8 +96,6 @@ func listPods(pod *gin.Context) string {
 	apiserver := os.Getenv("APISERVER")
 	ns := pod.Query("namespace")
 
-	fmt.Println("Namespace: ", ns)
-
 	tokenFile, err := os.Open(tokenPath)
 
 	if err != nil {
@@ -122,7 +121,6 @@ func listPods(pod *gin.Context) string {
 	output := string(out)
 	return output
 }
-
 
 func listNamespaces() string {
 	cacert := os.Getenv("CACERT")
@@ -159,7 +157,7 @@ func listNamespaces() string {
 //========================= Handlers =========================
 
 func GetLogs(g *gin.Context) {
-	output := getLogs()
+	output := getLogs(g)
 	g.IndentedJSON(http.StatusOK, gin.H{
 		"output": output,
 	})
