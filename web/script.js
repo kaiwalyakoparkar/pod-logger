@@ -41,7 +41,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 podElement.addEventListener('click', () => {
                     document.querySelectorAll('.pod-item').forEach(p => p.classList.remove('active'));
                     podElement.classList.add('active');
-                    showPodLogs(namespace, pod.metadata.name);
+                    //Container name is hardcoded to 'api' for now
+                    showPodLogs(namespace, pod.metadata.name, "api");
                     currentPod.textContent = pod.metadata.name;
                 });
 
@@ -49,14 +50,14 @@ document.addEventListener('DOMContentLoaded', function () {
             })
         }).catch(error => {
             logsContent.textContent = "No pods/logs found or you don't have access to the namespace";
+            console.error('Error listing pods: ', error);
         });
     }
 
     function showPodLogs(namespace, podName) {
-        const pod = fetchLogs(namespace, podName);
+        const pod = fetchLogs(namespace, podName, containerName);
 
         pod.then(data => {
-            // console.log("Log data updated!");
             logsContent.textContent = data;
         })
     }
@@ -81,8 +82,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-function fetchLogs(namespace, podName) {
-    return fetch('http://localhost:8081/api/logs?namespace=' + namespace + '&pod=' + podName)
+function fetchLogs(namespace, podName, containerName) {
+    return fetch('http://localhost:8081/api/logs?namespace=' + namespace + '&pod=' + podName+ '&container=' + containerName)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');

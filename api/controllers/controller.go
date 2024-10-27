@@ -19,6 +19,7 @@ func getLogs(l *gin.Context) string {
 	apiserver := os.Getenv("APISERVER")
 	podName := l.Query("pod")
 	namespace := l.Query("namespace")
+	container := l.Query("container")
 
 	tokenFile, err := os.Open(tokenPath)
 
@@ -33,7 +34,7 @@ func getLogs(l *gin.Context) string {
 		return "Error Occured\n"
 	}
 
-	cmd := exec.Command("curl", "--cacert", cacert, "--header", "Authorization: Bearer "+string(token), apiserver+"/api/v1/namespaces/"+namespace+"/pods/"+podName+"/log")
+	cmd := exec.Command("curl", "--cacert", cacert, "--header", "Authorization: Bearer "+string(token), apiserver+"/api/v1/namespaces/"+namespace+"/pods/"+podName+"/log?container="+container+"&tailLines=100&timestamps=true")
 
 	out, err := cmd.Output()
 
