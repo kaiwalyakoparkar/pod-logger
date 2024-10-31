@@ -205,9 +205,12 @@ func listContainer(c *gin.Context) string {
 		for i, container := range pod.Spec.Containers {
 			containerNames[i] = container.Name
 		} 
-		//Auto select the main api container
-		mainContainer := containerNames[1]
-		return mainContainer
+		containerNamesJSON, err := json.Marshal(containerNames)
+		if err != nil {
+			fmt.Println("could not run command: ", err)
+			return "Error Occured\n"
+		}
+		return string(containerNamesJSON)
 	} else {
 		return "No containers found\n"
 	}

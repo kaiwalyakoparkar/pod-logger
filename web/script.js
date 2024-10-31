@@ -59,8 +59,9 @@ document.addEventListener('DOMContentLoaded', function () {
         container = fetchContainer(namespace, podName);
         container.then(data => {
             console.log("Using container " +data);
-            containerName = data;
-            const pod = fetchLogs(namespace, podName, containerName);
+            containerName = JSON.parse(data);
+
+            const pod = fetchLogs(namespace, podName, containerName[0]);
             pod.then(data => {
                 logsContent.textContent = data;
             })
