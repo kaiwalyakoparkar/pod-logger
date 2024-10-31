@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const currentNamespace = document.getElementById('currentNamespace');
     const currentPod = document.getElementById('currentPod');
     const refreshButton = document.getElementById('refreshButton');
+    let refreshNs, refreshPod = '';
 
     //Fetching Namespaces and processing them for options
     let namespaceData = fetchNamespaces();
@@ -59,11 +60,13 @@ document.addEventListener('DOMContentLoaded', function () {
         container = fetchContainer(namespace, podName);
         container.then(data => {
             data = JSON.parse(data);
-            containerName = data[1];
+            containerName = data[0];
             console.log("Using container " +containerName);
             const pod = fetchLogs(namespace, podName, containerName);
             pod.then(data => {
                 logsContent.textContent = data;
+                refreshNs = namespace;
+                refreshPod = podName;
             })
         })
     }
@@ -84,81 +87,65 @@ document.addEventListener('DOMContentLoaded', function () {
 
     //Refresh Button event listener
     refreshButton.addEventListener('click', () => {
-        showPodLogs()
+        showPodLogs(refreshNs, refreshPod);
     });
 });
 
-function fetchLogs(namespace, podName, containerName) {
-    return fetch('http://localhost:8081/api/logs?namespace=' + namespace + '&pod=' + podName+ '&container='+ containerName)
-        .then(response => {
+//Async functions to fetch data from the API
+
+async function fetchLogs(namespace, podName, containerName) {
+    try {
+        const response = await fetch('http://localhost:8081/api/logs?namespace=' + namespace + '&pod=' + podName+ '&container='+ containerName);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            return response.text(); // Parse the JSON directly
-        })
-        .then(data => {
+        let data = await response.text();
             data = JSON.parse(data);
-            data = data.output;
-            return data; 
-        })
-        .catch(error => {
+        return data.output;
+    } catch (error) {
             console.error('Error listing namespaces: ', error);
-        });
+    }
 }
 
-function fetchPods(namespace) {
-    return fetch('http://localhost:8081/api/listPods?namespace=' + namespace)
-        .then(response => {
+async function fetchPods(namespace) {
+    try {
+        const response = await fetch('http://localhost:8081/api/listPods?namespace=' + namespace);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            return response.text(); // Parse the JSON directly
-        })
-        .then(data => {
+        let data = await response.text();
             data = JSON.parse(data);
-            // console.log(data.env);
-            data = data.env;
-            // console.log(data.env)
-            return data;
-        })
-        .catch(error => {
+        return data.env;
+    } catch (error) {
             console.error('Error listing pods: ', error);
-        });
+    }
 }
 
 //Function to crawl the namespace url
-function fetchNamespaces() {
-    return fetch('http://localhost:8081/api/listNs') 
-        .then(response => {
+async function fetchNamespaces() {
+    try {
+        const response = await fetch('http://localhost:8081/api/listNs');
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            return response.text(); // Parse the JSON directly
-        })
-        .then(data => {
+        let data = await response.text();
             data = JSON.parse(data);
-            data = data.env;
-            return data; 
-        })
-        .catch(error => {
+        return data.env;
+    } catch (error) {
             console.error('Error listing namespaces: ', error);
-        });
+    }
 }
 
-function fetchContainer(namespace, podName) {
-    return fetch('http://localhost:8081/api/lsCont?namespace=' + namespace + '&pod=' + podName)
-        .then(response => {
+async function fetchContainer(namespace, podName) {
+    try {
+        const response = await fetch('http://localhost:8081/api/lsCont?namespace=' + namespace + '&pod=' + podName);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            return response.text(); // Parse the JSON directly
-        })
-        .then(data => {
+        let data = await response.text();
             data = JSON.parse(data);
-            data = data.env;
-            return data;
-        })
-        .catch(error => {
+        return data.env;
+    } catch (error) {
             console.error('Error listing containers: ', error);
-        });
+    }
 }
