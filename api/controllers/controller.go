@@ -205,8 +205,9 @@ func listContainer(c *gin.Context) string {
 		for i, container := range pod.Spec.Containers {
 			containerNames[i] = container.Name
 		} 
-		firstContainer := containerNames[0]
-		return firstContainer
+		//Auto select the main api container
+		mainContainer := containerNames[1]
+		return mainContainer
 	} else {
 		return "No containers found\n"
 	}

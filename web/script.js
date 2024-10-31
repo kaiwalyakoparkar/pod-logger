@@ -28,7 +28,8 @@ document.addEventListener('DOMContentLoaded', function () {
         let podsData = fetchPods(namespace);
         podsData.then(data => {
             data = JSON.parse(data);
-
+            console.log(data);
+            
             data.items.forEach(pod => {
                 let podElement = document.createElement('div');
                 podElement.className = 'pod-item';
@@ -42,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     document.querySelectorAll('.pod-item').forEach(p => p.classList.remove('active'));
                     podElement.classList.add('active');
                     //Container name is hardcoded to 'api' for now
-                    showPodLogs(namespace, pod.metadata.name, "api");
+                    showPodLogs(namespace, pod.metadata.name);
                     currentPod.textContent = pod.metadata.name;
                 });
 
@@ -55,11 +56,16 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function showPodLogs(namespace, podName) {
-        const pod = fetchLogs(namespace, podName, containerName);
-
-        pod.then(data => {
-            logsContent.textContent = data;
+        container = fetchContainer(namespace, podName);
+        container.then(data => {
+            console.log("Using container " +data);
+            containerName = data;
+            const pod = fetchLogs(namespace, podName, containerName);
+            pod.then(data => {
+                logsContent.textContent = data;
+            })
         })
+
     }
 
     //Fetching pods after receieving selected namespace
@@ -83,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function fetchLogs(namespace, podName, containerName) {
-    return fetch('http://localhost:8081/api/logs?namespace=' + namespace + '&pod=' + podName+ '&container=' + containerName)
+    return fetch('http://localhost:8081/api/logs?namespace=' + namespace + '&pod=' + podName+ '&container='+ containerName)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -139,53 +145,20 @@ function fetchNamespaces() {
         });
 }
 
-function fetchEnv() {
-    fetch('/api/env')
-        .then(response => response.json())
+function fetchContainer(namespace, podName) {
+    return fetch('http://localhost:8081/api/lsCont?namespace=' + namespace + '&pod=' + podName)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text(); // Parse the JSON directly
+        })
         .then(data => {
-            console.log('Environment:', data);
+            data = JSON.parse(data);
+            data = data.env;
+            return data;
         })
         .catch(error => {
-            console.error('Error fetching environment:', error);
+            console.error('Error listing containers: ', error);
         });
-}
-
-function fetchStatus() {
-    fetch('/api/status')
-        .then(response => response.json())
-        .then(data => {
-            console.log('Status:', data);
-        })
-        .catch(error => {
-            console.error('Error fetching status:', error);
-        });
-}
-
-function sayHello() {
-    fetch('/')
-        .then(response => response.text())
-        .then(data => {
-            console.log('Hello:', data);
-        })
-        .catch(error => {
-            console.error('Error saying hello:', error);
-        });
-}
-
-function updateNamespace(namespace) {
-        
-    fetch('/api/updateNs', {
-        method: 'POST',
-        headers: {
-        'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ namespace })
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Namespace update response:', data);
-    })
-    .catch(error => {
-        console.error('Error updating namespace:', error);
-    });
 }
