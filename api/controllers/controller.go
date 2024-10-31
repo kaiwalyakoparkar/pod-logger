@@ -210,6 +210,7 @@ func listContainer(c *gin.Context) string {
 			fmt.Println("could not run command: ", err)
 			return "Error Occured\n"
 		}
+		print(string(containerNamesJSON))
 		return string(containerNamesJSON)
 	} else {
 		return "No containers found\n"
