@@ -23,16 +23,16 @@ func Router() *gin.Engine {
 
 	router.Use(cors.New(config))
 
-	// router.Use(cors.Default())
-
 	fmt.Println("🎉 Server started")
 	router.GET("/api/logs", controller.GetLogs)
 	router.GET("/api/listPods", controller.ListPods)
 	router.GET("/api/listNs", controller.ListNamespaces)
 	router.GET("/api/lsCont", controller.ListContainers)
-	router.GET("/api/env", controller.GetEnv)
 	router.GET("/api/status", controller.GetStatus)
 	router.GET("/", controller.Hello)
+
+	//Routes strictly for testing and debugging
+	// router.GET("/api/env", controller.GetEnv)
 
 	return router
 }

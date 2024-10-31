@@ -22,6 +22,8 @@ func getLogs(l *gin.Context) string {
 	namespace := l.Query("namespace")
 	container := l.Query("container")
 
+	fmt.Println("👷 Getting logs for: ", podName)
+
 	tokenFile, err := os.Open(tokenPath)
 
 	if err != nil {
@@ -42,7 +44,7 @@ func getLogs(l *gin.Context) string {
 	if err != nil {
 		fmt.Println("could not run command: ", err)
 	} else {
-		fmt.Println("Output: \n", string(out))
+		fmt.Println("🥳 Logs sent successfully")
 	}
 	output := string(out)
 	return output
@@ -73,24 +75,23 @@ func getStatus() string {
 	if err != nil {
 		fmt.Println("could not run command: ", err)
 	} else {
-		fmt.Println("Output: \n", string(out))
+		fmt.Println("🥳 Status sent successfully")
 	}
 	output := string(out)
 	return output
 }
 
-
-func getEnvs() string {
-	cmd := exec.Command("env")
-	out, err := cmd.Output()
-	if err != nil {
-		fmt.Println("could not run command: ", err)
-	} else {
-		fmt.Println("Output: \n", string(out))
-	}
-		output := string(out)
-		return output
-}
+// func getEnvs() string {
+// 	cmd := exec.Command("env")
+// 	out, err := cmd.Output()
+// 	if err != nil {
+// 		fmt.Println("could not run command: ", err)
+// 	} else {
+// 		fmt.Println("Env sent successfully")
+// 	}
+// 		output := string(out)
+// 		return output
+// }
 
 func listPods(pod *gin.Context) string {
 	cacert := os.Getenv("CACERT")
@@ -99,6 +100,8 @@ func listPods(pod *gin.Context) string {
 	ns := pod.Query("namespace")
 
 	tokenFile, err := os.Open(tokenPath)
+
+	fmt.Println("👷 Getting pods from: ", ns)
 
 	if err != nil {
 		fmt.Println("could not open token file: ", err)
@@ -118,7 +121,7 @@ func listPods(pod *gin.Context) string {
 	if err != nil {
 		fmt.Println("could not run command: ", err)
 	} else {
-		fmt.Println("Output: \n", string(out))
+		fmt.Println("🥳 Pods List sent successfully")
 	}
 	output := string(out)
 	return output
@@ -149,7 +152,7 @@ func listNamespaces() string {
 	if err != nil {
 		fmt.Println("could not run command: ", err)
 	} else {
-		fmt.Println("Output: \n", string(out))
+		fmt.Println("🥳 Namespace list sent successfully")
 	}
 
 	output := string(out)
@@ -163,6 +166,8 @@ func listContainer(c *gin.Context) string {
 	apiserver := os.Getenv("APISERVER")
 	namespace := c.Query("namespace")
 	podName := c.Query("pod")
+
+	fmt.Println("👷 Getting containers for: ", podName)
 
 	tokenFile, err := os.Open(tokenPath)
 
@@ -197,7 +202,7 @@ func listContainer(c *gin.Context) string {
 	if err != nil {
 		fmt.Println("could not run command: ", err)
 	} else {
-		fmt.Println("Output: \n", string(out))
+		fmt.Println("🫡 Your container list is getting ready")
 	}
 
 	if len(pod.Spec.Containers) > 0 {
@@ -210,7 +215,8 @@ func listContainer(c *gin.Context) string {
 			fmt.Println("could not run command: ", err)
 			return "Error Occured\n"
 		}
-		print(string(containerNamesJSON))
+
+		fmt.Println("🥳 Container List sent successfully")
 		return string(containerNamesJSON)
 	} else {
 		return "No containers found\n"
@@ -233,12 +239,13 @@ func GetStatus(g *gin.Context) {
 	})
 }
 
-func GetEnv(g *gin.Context) {
-	output := getEnvs()
-	g.IndentedJSON(http.StatusOK, gin.H{
-		"env": output,
-	})
-}
+//This endpoint is testing purpose only to check if the env variables are being read correctly
+// func GetEnv(g *gin.Context) {
+// 	output := getEnvs()
+// 	g.IndentedJSON(http.StatusOK, gin.H{
+// 		"env": output,
+// 	})
+// }
 
 func ListPods(g *gin.Context) {
 	output := listPods(g)

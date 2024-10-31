@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let podsData = fetchPods(namespace);
         podsData.then(data => {
             data = JSON.parse(data);
-            console.log(data);
+            // console.log(data);
             
             data.items.forEach(pod => {
                 let podElement = document.createElement('div');
@@ -58,22 +58,20 @@ document.addEventListener('DOMContentLoaded', function () {
     function showPodLogs(namespace, podName) {
         container = fetchContainer(namespace, podName);
         container.then(data => {
-            console.log("Using container " +data);
-            // containerName = JSON.parse(data);
-            containerName = data[0];
-
-            const pod = fetchLogs(namespace, podName, containerName[0]);
+            data = JSON.parse(data);
+            containerName = data[1];
+            console.log("Using container " +containerName);
+            const pod = fetchLogs(namespace, podName, containerName);
             pod.then(data => {
                 logsContent.textContent = data;
             })
         })
-
     }
 
     //Fetching pods after receieving selected namespace
     namespaceSelect.addEventListener('change', (e) => {
         const selectedNamespace = e.target.value;
-        console.log(selectedNamespace)//testing OK
+        // console.log(selectedNamespace)//testing OK
         if (selectedNamespace) {
             updatePodList(selectedNamespace);
             currentNamespace.textContent = selectedNamespace;
