@@ -1,6 +1,7 @@
 package contollers
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -34,7 +35,7 @@ func getLogs(l *gin.Context) string {
 		return "Error Occured\n"
 	}
 
-	cmd := exec.Command("curl", "--cacert", cacert, "--header", "Authorization: Bearer "+string(token), apiserver+"/api/v1/namespaces/"+namespace+"/pods/"+podName+"/log?container="+container+"&tailLines=100&timestamps=true")
+	cmd := exec.Command("curl", "--cacert", cacert, "--header", "Authorization: Bearer "+string(token), apiserver+"/api/v1/namespaces/"+namespace+"/pods/"+podName+"/log?container="+container+"&timestamps=true")
 
 	out, err := cmd.Output()
 
@@ -155,6 +156,62 @@ func listNamespaces() string {
 	return output
 }
 
+func listContainer(c *gin.Context) string {
+
+	cacert := os.Getenv("CACERT")
+	tokenPath := os.Getenv("TOKEN")
+	apiserver := os.Getenv("APISERVER")
+	namespace := c.Query("namespace")
+	podName := c.Query("pod")
+
+	tokenFile, err := os.Open(tokenPath)
+
+	if err != nil {
+		fmt.Println("could not open token file: ", err)
+		return "Error Occured\n"
+	}
+
+	token, err := io.ReadAll(tokenFile)
+	if err != nil {
+		fmt.Println("could not read token file: ", err)
+		return "Error Occured\n"
+	}
+
+	cmd := exec.Command("curl", "--cacert", cacert, "--header", "Authorization: Bearer "+string(token), apiserver+"/api/v1/namespaces/"+namespace+"/pods/"+podName)
+
+	out, err := cmd.Output()
+	if err != nil {
+		fmt.Println("could not run command: ", err)
+		return "Error Occured\n"
+	}
+
+	var pod struct {
+		Spec struct {
+			Containers []struct {
+				Name string `json:"name"`
+			} `json:"containers"`
+		} `json:"spec"`
+	}
+
+	err = json.Unmarshal(out, &pod)
+	if err != nil {
+		fmt.Println("could not run command: ", err)
+	} else {
+		fmt.Println("Output: \n", string(out))
+	}
+
+	if len(pod.Spec.Containers) > 0 {
+		containerNames := make([]string, len(pod.Spec.Containers))
+		for i, container := range pod.Spec.Containers {
+			containerNames[i] = container.Name
+		} 
+		firstContainer := containerNames[0]
+		return firstContainer
+	} else {
+		return "No containers found\n"
+	}
+}
+
 //========================= Handlers =========================
 
 func GetLogs(g *gin.Context) {
@@ -195,5 +252,12 @@ func ListNamespaces(g *gin.Context) {
 func Hello(g *gin.Context) {
 	g.IndentedJSON(http.StatusOK, gin.H{
 		"message": "Hello from Podlogger API",
+	})
+}
+
+func ListContainers(g *gin.Context) {
+	output := listContainer(g)
+	g.IndentedJSON(http.StatusOK, gin.H{
+		"env": output,
 	})
 }
