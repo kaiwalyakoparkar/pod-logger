@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', function () {
     const namespaceSelect = document.getElementById('namespaceSelect');
     const podList = document.getElementById('podList');
@@ -95,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 async function fetchLogs(namespace, podName, containerName) {
     try {
-        const response = await fetch('http://localhost:8081/api/logs?namespace=' + namespace + '&pod=' + podName+ '&container='+ containerName);
+        const response = await fetch('http://localhost:8080/api/logs?namespace=' + namespace + '&pod=' + podName+ '&container='+ containerName);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -109,7 +108,7 @@ async function fetchLogs(namespace, podName, containerName) {
 
 async function fetchPods(namespace) {
     try {
-        const response = await fetch('http://localhost:8081/api/listPods?namespace=' + namespace);
+        const response = await fetch('http://localhost:8080/api/listPods?namespace=' + namespace);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -124,7 +123,7 @@ async function fetchPods(namespace) {
 //Function to crawl the namespace url
 async function fetchNamespaces() {
     try {
-        const response = await fetch('http://localhost:8081/api/listNs');
+        const response = await fetch('http://localhost:8080/api/listNs');
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -138,7 +137,7 @@ async function fetchNamespaces() {
 
 async function fetchContainer(namespace, podName) {
     try {
-        const response = await fetch('http://localhost:8081/api/lsCont?namespace=' + namespace + '&pod=' + podName);
+        const response = await fetch('http://localhost:8080/api/lsCont?namespace=' + namespace + '&pod=' + podName);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }

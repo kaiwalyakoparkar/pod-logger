@@ -19,9 +19,6 @@ spec:
           cpu: "250m"
     - name: api
       image: kaiwalyakoparkar/podlogger-api
-      envFrom:
-      - configMapRef:
-          name: logger-config
       ports:
       - containerPort: 8080
       resources:
