@@ -40,10 +40,12 @@ spec:
   ports:
     - port: 80
       targetPort: 80
+      nodePort: 30080
       name: web
     - port: 8080
       targetPort: 8080
-      name:  api
+      nodePort: 30081
+      name: api
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
