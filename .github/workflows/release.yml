@@ -36,6 +36,15 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Check if tag already exists
+        id: check-tag
+        run: |
+          if git rev-parse "refs/tags/$(yq .version .github/package.yml)" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+          
       - name: Create Changelog
         uses: TriPSs/conventional-changelog-action@dd734f74fce61a6e02f821ee1b5930bc79a23534 # v5
         id: changelog
