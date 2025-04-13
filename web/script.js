@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 async function fetchLogs(namespace, podName, containerName) {
     try {
-        const response = await fetch('/api/logs?namespace=' + namespace + '&pod=' + podName + '&container=' + containerName);
+        const response = await fetch(`/api/logs?namespace=${namespace}&pod=${podName}&container=${containerName}`);
         let data = await response.text();
         if (!response.ok) {
             throw new Error('Network response was not ok');
@@ -102,13 +102,13 @@ async function fetchLogs(namespace, podName, containerName) {
         data = JSON.parse(data);
         return data.output;
     } catch (error) {
-        console.error('Error listing namespaces: ', error);
+        console.error('Error fetching logs: ', error);
     }
 }
 
 async function fetchPods(namespace) {
     try {
-        const response = await fetch('/api/listPods?namespace=' + namespace);
+        const response = await fetch(`/api/listPods?namespace=${namespace}`);
         let data = await response.text();
         if (!response.ok) {
             throw new Error('Network response was not ok');
