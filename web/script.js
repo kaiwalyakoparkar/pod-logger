@@ -10,15 +10,21 @@ document.addEventListener('DOMContentLoaded', function () {
     //Fetching Namespaces and processing them for options
     let namespaceData = fetchNamespaces();
     namespaceData.then(data => {
-        data = JSON.parse(data);
-
-        for (let ns of data.items) {
-            // console.log(ns);
-            let option = document.createElement('option');
-            option.value = ns.metadata.name;
-            option.text = ns.metadata.name;
-            namespaceSelect.appendChild(option);
+        try {
+            data = JSON.parse(data);
+            for (let ns of data.items) {
+                let option = document.createElement('option');
+                option.value = ns.metadata.name;
+                option.text = ns.metadata.name;
+                namespaceSelect.appendChild(option);
+            }
+        } catch (error) {
+            console.error('Error processing namespace data: ', error);
+            logsContent.textContent = "Error loading namespaces. Please try refreshing the page.";
         }
+    }).catch(error => {
+        console.error('Error fetching namespaces: ', error);
+        logsContent.textContent = "Error loading namespaces. Please try refreshing the page.";
     });
 
     function updatePodList(namespace) {
@@ -131,16 +137,26 @@ async function fetchNamespaces() {
     try {
         const response = await fetch('/api/listNs', {
             mode: 'cors',
-            credentials: 'same-origin'
+            credentials: 'same-origin',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
         });
-        let data = await response.text();
+        
         if (!response.ok) {
-            throw new Error('Network response was not ok');
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
-        data = JSON.parse(data);
+        
+        const data = await response.json();
+        if (!data || !data.env) {
+            throw new Error('Invalid response format');
+        }
+        
         return data.env;
     } catch (error) {
         console.error('Error listing namespaces: ', error);
+        throw error; // Re-throw to handle in the calling code
     }
 }
 
