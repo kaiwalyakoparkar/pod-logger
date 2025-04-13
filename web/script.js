@@ -94,7 +94,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
 async function fetchLogs(namespace, podName, containerName) {
     try {
-        const response = await fetch('/api/logs?namespace=' + namespace + '&pod=' + podName + '&container=' + containerName);
+        const response = await fetch('/api/logs?namespace=' + namespace + '&pod=' + podName + '&container=' + containerName, {
+            mode: 'cors',
+            credentials: 'same-origin'
+        });
         let data = await response.text();
         if (!response.ok) {
             throw new Error('Network response was not ok');
@@ -108,7 +111,10 @@ async function fetchLogs(namespace, podName, containerName) {
 
 async function fetchPods(namespace) {
     try {
-        const response = await fetch('/api/listPods?namespace=' + namespace);
+        const response = await fetch('/api/listPods?namespace=' + namespace, {
+            mode: 'cors',
+            credentials: 'same-origin'
+        });
         let data = await response.text();
         if (!response.ok) {
             throw new Error('Network response was not ok');
@@ -123,7 +129,10 @@ async function fetchPods(namespace) {
 //Function to crawl the namespace url
 async function fetchNamespaces() {
     try {
-        const response = await fetch('/api/listNs');
+        const response = await fetch('/api/listNs', {
+            mode: 'cors',
+            credentials: 'same-origin'
+        });
         let data = await response.text();
         if (!response.ok) {
             throw new Error('Network response was not ok');
@@ -137,7 +146,10 @@ async function fetchNamespaces() {
 
 async function fetchContainer(namespace, podName) {
     try {
-        const response = await fetch('/api/lsCont?namespace=' + namespace + '&pod=' + podName);
+        const response = await fetch('/api/lsCont?namespace=' + namespace + '&pod=' + podName, {
+            mode: 'cors',
+            credentials: 'same-origin'
+        });
         let data = await response.text();
         if (!response.ok) {
             throw new Error('Network response was not ok');
