@@ -32,8 +32,8 @@ metadata:
 spec:
   containers:
     - name: web
-      image: kaiwalyakoparkar/podlogger-web
-      imagePullPolicy: Always
+      image: kaiwalyakoparkar/podlogger-web:v4
+      imagePullPolicy: IfNotPresent
       ports:
       - containerPort: 80
       volumeMounts:
